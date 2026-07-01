@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Junior Supervisor Bill Generator</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Junior Supervisor Bill</h1>
+
+    <label for="name">Name of the Junior Supervisor</label>
+    <input type="text" id="name" placeholder="Enter full name (Surname first)" />
+
+    <label>Dates</label>
+    <div id="datesContainer"></div>
+    <button type="button" id="addDateBtn" class="secondary-btn">+ Add Date</button>
+
+    <label for="days">Number of Days Worked</label>
+    <input type="number" id="days" min="1" placeholder="Auto-fills from dates, or enter manually" readonly />
+
+    <div class="amount-row">
+      <span>Amount (Days &times; 200):</span>
+      <span id="amountDisplay">0</span>
+    </div>
+
+    <button type="button" id="generateBtn" class="primary-btn">Generate Excel &amp; PDF</button>
+
+    <p id="errorMsg" class="error"></p>
+
+    <div id="downloadLinks" class="downloads hidden">
+      <a id="xlsxLink" href="#" download>Download Excel (.xlsx)</a>
+      <a id="pdfLink" href="#" download>Download PDF</a>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f0f2f5;
+  margin: 0;
+  padding: 40px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background: #fff;
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 32px;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+label {
+  display: block;
+  margin: 16px 0 6px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+input[readonly] {
+  background: #f7f7f7;
+}
+
+.date-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.date-row input {
+  flex: 1;
+}
+
+.date-row button {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  width: 34px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.secondary-btn {
+  margin-top: 4px;
+  background: #eef3ff;
+  color: #2554c7;
+  border: 1px solid #c6d6fb;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  margin-top: 24px;
+  width: 100%;
+  background: #2554c7;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary-btn:hover { background: #1d3f9e; }
+
+.amount-row {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: bold;
+  background: #f7f9fc;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 13px;
+  min-height: 16px;
+  margin-top: 10px;
+}
+
+.downloads {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.downloads a {
+  text-align: center;
+  background: #2ecc71;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.hidden { display: none; }
