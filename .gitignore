@@ -1,0 +1,5 @@
+node_modules/
+backend/generated/
+backend/uploads/
+backend/_merge_pdfs_tmp.py
+*.log

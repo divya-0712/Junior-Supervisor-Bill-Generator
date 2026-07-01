@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Junior Supervisor Bill Generator</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="wrapper">
+  <h1>Junior Supervisor Bill Generator</h1>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('bulk')">📂 Upload Schedule (Bulk)</button>
+    <button class="tab-btn" onclick="switchTab('multi')">📋 Multi Entry</button>
+    <button class="tab-btn" onclick="switchTab('manual')">✏️ Single Entry</button>
+    <button class="tab-btn" onclick="switchTab('designations')">⚙️ Designations</button>
+  </div>
+
+  <!-- ═══════════════ BULK TAB ═══════════════ -->
+  <div id="tab-bulk" class="tab-content">
+    <div class="card">
+      <h2>Upload Schedule Excel</h2>
+      <p class="hint">Upload the schedule .xlsx file (B=Name, C=Designation, D onwards=Dates e.g. <strong>11.6(M)</strong>, <strong>11.6(E)</strong>)</p>
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="scheduleFile" accept=".xlsx" hidden/>
+        <div onclick="document.getElementById('scheduleFile').click()">
+          <div class="upload-icon">📄</div>
+          <div>Click to select .xlsx schedule file</div>
+          <div class="hint" id="fileNameDisplay">No file selected</div>
+        </div>
+      </div>
+      <button class="primary-btn" id="parseBtn" onclick="parseSchedule()">Parse Schedule</button>
+      <p id="parseError" class="error"></p>
+    </div>
+
+    <!-- Parsed persons table -->
+    <div id="personsSection" class="card hidden">
+      <div class="table-header-row">
+        <h2>Parsed Persons (<span id="personCount">0</span>)</h2>
+        <button class="primary-btn" id="generateAllBtn" onclick="generateAll()">⚡ Generate All Bills</button>
+      </div>
+      <div class="table-scroll">
+        <table id="personsTable">
+          <thead><tr><th>#</th><th>Name</th><th>Designation</th><th>Dates</th><th>Days</th><th>Amount (₹)</th></tr></thead>
+          <tbody id="personsBody"></tbody>
+        </table>
+      </div>
+      <p id="generateError" class="error"></p>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" class="card hidden">
+      <div class="table-header-row">
+        <h2>Generated Bills</h2>
+        <a id="combinedPdfBtn" href="#" class="combined-btn" download>⬇ Download Combined PDF (All)</a>
+      </div>
+      <div class="table-scroll">
+        <table id="resultsTable">
+          <thead><tr><th>#</th><th>Name</th><th>Designation</th><th>Days</th><th>Amount (₹)</th><th>Excel</th><th>PDF</th></tr></thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MULTI ENTRY TAB ═══════════════ -->
+  <div id="tab-multi" class="tab-content hidden">
+    <div class="card">
+      <h2>Multi-Person Manual Entry</h2>
+      <p class="hint">Add multiple people below and generate all bills at once. Each person uses the same date-based form as single entry.</p>
+      <div id="multiPersonsContainer"></div>
+      <button type="button" class="secondary-btn" onclick="addMultiPerson()" style="margin-top:8px">+ Add Person</button>
+      <button type="button" class="primary-btn" id="generateMultiBtn" onclick="generateMulti()" style="margin-top:12px;display:block">⚡ Generate All Bills</button>
+      <p id="multiError" class="error"></p>
+    </div>
+
+    <div id="multiResultsSection" class="card hidden">
+      <div class="table-header-row">
+        <h2>Generated Bills</h2>
+        <a id="multiCombinedPdfBtn" href="#" class="combined-btn" download>⬇ Download Combined PDF (All)</a>
+      </div>
+      <div class="table-scroll">
+        <table id="multiResultsTable">
+          <thead><tr><th>#</th><th>Name</th><th>Designation</th><th>Days</th><th>Amount (₹)</th><th>Excel</th><th>PDF</th></tr></thead>
+          <tbody id="multiResultsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DESIGNATIONS TAB ═══════════════ -->
+  <div id="tab-designations" class="tab-content hidden">
+    <div class="card">
+      <h2>Manage Designations &amp; Rates</h2>
+      <p class="hint">Add, edit, or remove designations. Each designation has a daily rate used for bill calculation.</p>
+
+      <div class="desig-form">
+        <input type="text" id="desigNameInput" placeholder="Designation name e.g. Lab Assistant"/>
+        <input type="number" id="desigRateInput" placeholder="Daily rate (₹)" min="1"/>
+        <button class="primary-btn" onclick="addDesignation()">Add</button>
+      </div>
+      <p id="desigError" class="error"></p>
+
+      <div class="table-scroll" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Designation</th><th>Daily Rate (₹)</th><th></th></tr></thead>
+          <tbody id="designationsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MANUAL TAB ═══════════════ -->
+  <div id="tab-manual" class="tab-content hidden">
+    <div class="card">
+      <h2>Single Entry</h2>
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Enter full name (Surname first)"/>
+
+      <label for="desigSingle">Designation</label>
+      <select id="desigSingle" class="desig-select"></select>
+
+      <label>Dates</label>
+      <div id="datesContainer"></div>
+      <button type="button" id="addDateBtn" class="secondary-btn" onclick="addDateRow()">+ Add Date</button>
+
+      <label for="days">Number of Days Worked</label>
+      <input type="number" id="days" readonly/>
+
+      <div class="amount-row">
+        <span>Amount:</span>
+        <span id="amountDisplay">0</span>
+      </div>
+
+      <button type="button" id="generateBtn" class="primary-btn" onclick="generateSingle()">Generate Excel &amp; PDF</button>
+      <p id="errorMsg" class="error"></p>
+      <div id="downloadLinks" class="downloads hidden">
+        <a id="xlsxLink" href="#" download>⬇ Download Excel (.xlsx)</a>
+        <a id="pdfLink" href="#" download>⬇ Download PDF</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

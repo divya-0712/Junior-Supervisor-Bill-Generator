@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Junior Supervisor",
+    "rate": 200
+  },
+  {
+    "name": "Lab Assistant",
+    "rate": 150
+  },
+  {
+    "name": "Senior Supervisor",
+    "rate": 250
+  },
+  {
+    "name": "Ceo",
+    "rate": 3000
+  }
+]
